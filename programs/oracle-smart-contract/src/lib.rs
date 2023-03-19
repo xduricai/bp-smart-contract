@@ -22,24 +22,14 @@ pub mod oracle_smart_contract {
     pub fn add_subscription(ctx: Context<AddSubscription>, input: SubscriptionInput) -> Result<()> {
         let subscription: &mut Account<Subscription> = &mut ctx.accounts.subscription;
         
-        if input.api.chars().count() > crate::state::MAX_API_SIZE {
-            return Err(crate::errors::MyError::ApiTooLarge.into())
-        }
-
-        if input.headers.chars().count() > crate::state::MAX_HEADERS_SIZE {
-            return Err(crate::errors::MyError::HeadersTooLarge.into())
-        }
-
-        if input.params.chars().count() > crate::state::MAX_PARAMS_SIZE {
-            return Err(crate::errors::MyError::ParamsTooLarge.into())
+        if input.options.chars().count() > crate::state::MAX_OPTIONS_SIZE {
+            return Err(crate::errors::MyError::OptionsTooLong.into())
         }
 
         subscription.client = *ctx.accounts.client.key;
         subscription.recipient = input.recipient;
         subscription.length = input.length;
-        subscription.api = input.api;
-        subscription.headers = input.headers;
-        subscription.params = input.params;
+        subscription.options = input.options;
 
         Ok(())
     }

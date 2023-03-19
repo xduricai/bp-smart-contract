@@ -7,10 +7,8 @@ pub const MAX_ORACLES: usize = 10;
 pub const ORACLE_SIZE: usize = 44;
 pub const MAX_STATE_SIZE: usize = (ORACLE_SIZE * MAX_ORACLES) + 20;
 
-pub const MAX_API_SIZE: usize = 100;
-pub const MAX_HEADERS_SIZE: usize = 500;
-pub const MAX_PARAMS_SIZE: usize = 300;
-pub const MAX_SUBSCRIPTION_SIZE: usize = MAX_API_SIZE + MAX_HEADERS_SIZE + MAX_PARAMS_SIZE + 150;
+pub const MAX_OPTIONS_SIZE: usize = 900;
+pub const MAX_SUBSCRIPTION_SIZE: usize = MAX_OPTIONS_SIZE + 150;
 
 #[account]
 pub struct State {
@@ -92,18 +90,14 @@ pub struct Subscription {
     pub client: Pubkey,
     pub recipient: Pubkey,
     pub length: i64,
-    pub api: String,
-    pub headers: String,
-    pub params: String
+    pub options: String
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct SubscriptionInput {
     pub recipient: Pubkey,
     pub length: i64,
-    pub api: String,
-    pub headers: String,
-    pub params: String
+    pub options: String
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
