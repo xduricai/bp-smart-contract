@@ -16,7 +16,7 @@ pub struct AddSubscription<'info> {
     pub subscription: Account<'info, Subscription>,
     #[account(mut)]
     pub client: Signer<'info>,
-    pub system_program: AccountInfo<'info>,
+    pub system_program: Program<'info, System>,
 }
 
 #[derive(Accounts)]
