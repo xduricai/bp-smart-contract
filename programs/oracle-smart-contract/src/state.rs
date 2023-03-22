@@ -1,6 +1,5 @@
 use anchor_lang::prelude::*;
 use std::convert::TryFrom;
-use rand::Rng;
 use crate::errors::*;
 
 pub const MAX_ORACLES: usize = 10;
@@ -27,27 +26,14 @@ impl State {
     }
 
     pub fn select_leader(&mut self) -> Result<()> {
-        let mut combined_stake = 0;
-        let mut cutoffs: Vec<u32> = Vec::new();
-
         if self.oracle_count == 0 {
             self.initialized = false;
             return Err(MyError::NoOracles.into())
         }
 
-        for i in 0..self.oracle_count {
-            combined_stake += self.oracles[i].total_stake;
-            cutoffs.push(combined_stake);
-        }
+        self.leader += 1;
+        self.leader %= self.oracle_count;
 
-        let selected = rand::thread_rng().gen_range(0..combined_stake);
-
-        for index in 0..cutoffs.len() {
-            if selected <= cutoffs[index] {
-                self.leader = index;
-                break;
-            }
-        }
         return Ok(())
     }
 
