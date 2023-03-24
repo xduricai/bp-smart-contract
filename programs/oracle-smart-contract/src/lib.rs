@@ -16,7 +16,7 @@ pub mod oracle_smart_contract {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        ctx.accounts.state.start()
+        ctx.accounts.state.initialize()
     }
 
     pub fn add_subscription(ctx: Context<AddSubscription>, input: SubscriptionInput) -> Result<()> {

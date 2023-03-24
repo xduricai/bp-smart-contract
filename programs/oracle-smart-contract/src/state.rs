@@ -12,13 +12,13 @@ pub const MAX_SUBSCRIPTION_SIZE: usize = MAX_OPTIONS_SIZE + 150;
 #[account]
 pub struct State {
     pub oracles: [Oracle; MAX_ORACLES],
-    pub leader: usize,
-    pub oracle_count: usize,
+    pub leader: u8,
+    pub oracle_count: u8,
     pub initialized: bool,
 }
 
 impl State {
-    pub fn start(&mut self) -> Result<()> {
+    pub fn initialize(&mut self) -> Result<()> {
         if self.oracle_count > 0 {
             self.initialized = true;
         }
@@ -42,7 +42,7 @@ impl State {
     }
 
     pub fn add_oracle(&mut self, stake: u32, address: Pubkey) -> Result<()> {
-        if self.oracle_count >= MAX_ORACLES {
+        if self.oracle_count as usize >= MAX_ORACLES {
             return Err(MyError::OracleCapReached.into())
         }
         else {
