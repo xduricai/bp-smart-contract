@@ -4,5 +4,6 @@ use anchor_lang::prelude::*;
 pub enum MyError {
     OptionsTooLong,
     OracleCapReached,
+    NoStakeDeposited,
     NoOracles
 }

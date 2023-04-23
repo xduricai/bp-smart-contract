@@ -16,7 +16,10 @@ pub mod oracle_smart_contract {
     use super::*;
 
     pub fn initialize(ctx: Context<Initialize>) -> Result<()> {
-        ctx.accounts.state.initialize()
+        let seed = State::generate_seed(&ctx.accounts.recent_slothashes)?;
+        ctx.accounts.state.initialize(seed)?;
+
+        Ok(())
     }
 
     pub fn add_subscription(ctx: Context<AddSubscription>, input: SubscriptionInput) -> Result<()> {
@@ -34,11 +37,13 @@ pub mod oracle_smart_contract {
         Ok(())
     }
 
-    pub fn add_oracle(ctx: Context<AddOracle>, stake: u32) -> Result<()> {
-        ctx.accounts.state.add_oracle(stake, *ctx.accounts.address.key)
+    pub fn add_oracle(ctx: Context<AddOracle>) -> Result<()> {
+        let stake = ctx.accounts.oracle.to_account_info().lamports();
+        let seed = State::generate_seed(&ctx.accounts.recent_slothashes)?;
+        ctx.accounts.state.add_oracle(seed, stake, *ctx.accounts.address.key)
     }
 
     pub fn report_data(ctx: Context<ReportData>, data: Vec<DataInput>) -> Result<()> {
         ctx.accounts.state.process_data(data)
     }
-} 
+}
