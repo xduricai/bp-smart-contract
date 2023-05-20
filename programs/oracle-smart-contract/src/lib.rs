@@ -43,7 +43,17 @@ pub mod oracle_smart_contract {
         ctx.accounts.state.add_oracle(seed, stake, *ctx.accounts.address.key)
     }
 
-    pub fn report_data(ctx: Context<ReportData>, data: Vec<DataInput>) -> Result<()> {
-        ctx.accounts.state.process_data(data)
+    pub fn report_data(ctx: Context<ReportData>, data: String) -> Result<()> {
+        let subscription: &mut Account<Subscription> = &mut ctx.accounts.subscription;
+        subscription.data = data;
+
+        Ok(())
+    }
+    
+    pub fn end_round(ctx: Context<EndRound>, accepted: bool) -> Result<()> {
+        ctx.accounts.state.end_round(accepted)?;
+        let seed = State::generate_seed(&ctx.accounts.recent_slothashes)?;
+        ctx.accounts.state.next_cycle(seed);
+        Ok(())
     }
 }

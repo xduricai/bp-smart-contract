@@ -4,25 +4,25 @@ use std::convert::TryFrom;
 use crate::errors::*;
 
 pub const MAX_ORACLES: usize = 10;
-pub const ORACLE_SIZE: usize = 52;
+pub const ORACLE_SIZE: usize = 60;
 pub const ORACLE_ACC_SIZE: usize = 4;
 pub const MAX_STATE_SIZE: usize = (ORACLE_SIZE * MAX_ORACLES) + 30;
 
 pub const MAX_OPTIONS_SIZE: usize = 900;
-pub const MAX_SUBSCRIPTION_SIZE: usize = MAX_OPTIONS_SIZE + 150;
+pub const MAX_DATA_SIZE: usize = 10000;
+pub const MAX_SUBSCRIPTION_SIZE: usize = MAX_OPTIONS_SIZE + MAX_DATA_SIZE + 150;
 
 #[account]
 pub struct State {
     pub oracles: [Oracle; MAX_ORACLES],
     pub leader: u8,
+    pub leader_id: u8,
     pub oracle_count: u8,
     pub initialized: bool,
-    pub seed: u64 //TODO remove
 }
 
 impl State {
     pub fn initialize(&mut self, seed: u64) -> Result<()> {
-        self.seed = seed;
         
         if self.oracle_count > 0 {
             self.initialized = true;
@@ -55,6 +55,7 @@ impl State {
 
             if current_stake > random {
                 self.leader = index as u8;
+                self.leader_id = oracle.id;
                 break;
             }
         }
@@ -75,6 +76,7 @@ impl State {
         }
         else {
             let index = usize::try_from(self.oracle_count).unwrap();
+            self.oracles[index].id = index as u8 + 1;
             self.oracles[index].address = address;
             self.oracles[index].total_stake += stake;
             self.oracle_count += 1;
@@ -88,7 +90,17 @@ impl State {
         }
     }
 
-    pub fn process_data(&mut self, _data: Vec<DataInput>) -> Result<()> {
+    pub fn end_round(&mut self, accepted: bool) -> Result<()> {
+        if accepted {
+            let reward = self.oracles[self.leader_id as usize].total_stake as f64 * 1.2;
+            let result = reward.floor() as u64;
+            self.oracles[self.leader_id as usize].total_stake = result; 
+        } else {
+            let penalty = self.oracles[self.leader_id as usize].total_stake as f64 * 0.8;
+            let result = penalty.floor() as u64;
+            self.oracles[self.leader_id as usize].total_stake = result; 
+        }
+        
         Ok(())
     }
 
@@ -102,6 +114,7 @@ impl State {
 
 #[derive(AnchorSerialize, AnchorDeserialize, Default, Clone, Copy)]
 pub struct Oracle {
+    pub id: u8,
     pub address: Pubkey,
     pub total_stake: u64,
     pub total_rewards: u64,
@@ -115,7 +128,8 @@ pub struct Subscription {
     pub client: Pubkey,
     pub recipient: Pubkey,
     pub length: i64,
-    pub options: String
+    pub options: String,
+    pub data: String
 }
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
@@ -123,10 +137,4 @@ pub struct SubscriptionInput {
     pub recipient: Pubkey,
     pub length: i64,
     pub options: String
-}
-
-#[derive(AnchorSerialize, AnchorDeserialize)]
-pub struct DataInput {
-    pub data_json: String,
-    pub recipient: Pubkey
 }
