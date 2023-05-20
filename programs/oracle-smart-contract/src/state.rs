@@ -5,11 +5,11 @@ use crate::errors::*;
 
 pub const MAX_ORACLES: usize = 10;
 pub const ORACLE_SIZE: usize = 60;
-pub const ORACLE_ACC_SIZE: usize = 4;
+pub const ORACLE_ACC_SIZE: usize = 20;
 pub const MAX_STATE_SIZE: usize = (ORACLE_SIZE * MAX_ORACLES) + ORACLE_ACC_SIZE + 100;
 
 pub const MAX_OPTIONS_SIZE: usize = 900;
-pub const MAX_DATA_SIZE: usize = 10000;
+pub const MAX_DATA_SIZE: usize = 8500;
 pub const MAX_SUBSCRIPTION_SIZE: usize = MAX_OPTIONS_SIZE + MAX_DATA_SIZE + 150;
 
 #[account]
