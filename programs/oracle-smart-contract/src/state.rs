@@ -86,6 +86,7 @@ impl State {
 
             if self.oracle_count == 1 {
                 self.initialized = true;
+                self.round_number += 1;
                 self.select_leader(seed).unwrap();
             }
 
@@ -129,7 +130,7 @@ pub struct OracleAccount { }
 #[account]
 pub struct Subscription {
     pub client: Pubkey,
-    pub recipient: Pubkey,
+    pub address: String,
     pub expiration: u64,
     pub options: String,
     pub data: String
@@ -137,7 +138,7 @@ pub struct Subscription {
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct SubscriptionInput {
-    pub recipient: Pubkey,
-    pub length: u64,
+    pub address: String,
+    pub duration: u64,
     pub options: String
 }

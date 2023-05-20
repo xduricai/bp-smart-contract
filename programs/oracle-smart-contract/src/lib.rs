@@ -31,8 +31,8 @@ pub mod oracle_smart_contract {
         }
 
         subscription.client = *ctx.accounts.client.key;
-        subscription.recipient = input.recipient;
-        subscription.expiration = round + input.length;
+        subscription.address = input.address;
+        subscription.expiration = round + input.duration;
         subscription.options = input.options;
 
         Ok(())
