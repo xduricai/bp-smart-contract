@@ -6,7 +6,7 @@ use crate::errors::*;
 pub const MAX_ORACLES: usize = 10;
 pub const ORACLE_SIZE: usize = 60;
 pub const ORACLE_ACC_SIZE: usize = 4;
-pub const MAX_STATE_SIZE: usize = (ORACLE_SIZE * MAX_ORACLES) + 30;
+pub const MAX_STATE_SIZE: usize = (ORACLE_SIZE * MAX_ORACLES) + ORACLE_ACC_SIZE + 100;
 
 pub const MAX_OPTIONS_SIZE: usize = 900;
 pub const MAX_DATA_SIZE: usize = 10000;
@@ -18,6 +18,7 @@ pub struct State {
     pub leader: u8,
     pub leader_id: u8,
     pub oracle_count: u8,
+    pub round_number: u64,
     pub initialized: bool,
 }
 
@@ -25,6 +26,7 @@ impl State {
     pub fn initialize(&mut self, seed: u64) -> Result<()> {
         
         if self.oracle_count > 0 {
+            self.round_number = 1;
             self.initialized = true;
             self.select_leader(seed).unwrap();
         }/* TODO remove, only used for testing
@@ -65,6 +67,7 @@ impl State {
 
     pub fn next_cycle(&mut self, seed: u64) {
         self.select_leader(seed).unwrap();
+        self.round_number += 1;
     }
 
     pub fn add_oracle(&mut self, seed: u64, stake: u64, address: Pubkey) -> Result<()> {
@@ -127,7 +130,7 @@ pub struct OracleAccount { }
 pub struct Subscription {
     pub client: Pubkey,
     pub recipient: Pubkey,
-    pub length: i64,
+    pub expiration: u64,
     pub options: String,
     pub data: String
 }
@@ -135,6 +138,6 @@ pub struct Subscription {
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct SubscriptionInput {
     pub recipient: Pubkey,
-    pub length: i64,
+    pub length: u64,
     pub options: String
 }

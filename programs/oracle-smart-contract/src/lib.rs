@@ -24,6 +24,7 @@ pub mod oracle_smart_contract {
 
     pub fn add_subscription(ctx: Context<AddSubscription>, input: SubscriptionInput) -> Result<()> {
         let subscription: &mut Account<Subscription> = &mut ctx.accounts.subscription;
+        let round: u64 = ctx.accounts.state.round_number;
         
         if input.options.chars().count() > crate::state::MAX_OPTIONS_SIZE {
             return Err(crate::errors::MyError::OptionsTooLong.into())
@@ -31,7 +32,7 @@ pub mod oracle_smart_contract {
 
         subscription.client = *ctx.accounts.client.key;
         subscription.recipient = input.recipient;
-        subscription.length = input.length;
+        subscription.expiration = round + input.length;
         subscription.options = input.options;
 
         Ok(())

@@ -19,6 +19,8 @@ pub struct AddSubscription<'info> {
     #[account(init, payer = client, space = crate::state::MAX_SUBSCRIPTION_SIZE)]
     pub subscription: Account<'info, Subscription>,
     #[account(mut)]
+    pub state: Account<'info, State>,
+    #[account(mut)]
     pub client: Signer<'info>,
     pub system_program: Program<'info, System>,
 }
