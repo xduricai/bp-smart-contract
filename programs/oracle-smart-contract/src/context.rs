@@ -39,7 +39,10 @@ pub struct AddOracle<'info> {
 }
 
 #[derive(Accounts)]
-pub struct ReportData<'info> {
+pub struct EndRound<'info> {
     #[account(mut)]
-    pub state: Account<'info, State>
+    pub state: Account<'info, State>,
+    /// CHECK: account constraints checked in account trait
+    #[account(address = sysvar::slot_hashes::id())]
+    pub recent_slothashes: UncheckedAccount<'info>,
 }

@@ -4,7 +4,7 @@ use std::convert::TryFrom;
 use crate::errors::*;
 
 pub const MAX_ORACLES: usize = 10;
-pub const ORACLE_SIZE: usize = 52;
+pub const ORACLE_SIZE: usize = 60;
 pub const ORACLE_ACC_SIZE: usize = 4;
 pub const MAX_STATE_SIZE: usize = (ORACLE_SIZE * MAX_ORACLES) + 30;
 
@@ -75,6 +75,7 @@ impl State {
         }
         else {
             let index = usize::try_from(self.oracle_count).unwrap();
+            self.oracles[index].id = index as u8 + 1;
             self.oracles[index].address = address;
             self.oracles[index].total_stake += stake;
             self.oracle_count += 1;
@@ -88,7 +89,7 @@ impl State {
         }
     }
 
-    pub fn process_data(&mut self, _data: Vec<DataInput>) -> Result<()> {
+    pub fn end_round(&mut self, accepted: bool) -> Result<()> {
         Ok(())
     }
 
@@ -102,6 +103,7 @@ impl State {
 
 #[derive(AnchorSerialize, AnchorDeserialize, Default, Clone, Copy)]
 pub struct Oracle {
+    pub id: u8,
     pub address: Pubkey,
     pub total_stake: u64,
     pub total_rewards: u64,
