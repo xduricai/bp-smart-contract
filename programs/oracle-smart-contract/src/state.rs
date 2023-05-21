@@ -130,7 +130,6 @@ pub struct OracleAccount { }
 #[account]
 pub struct Subscription {
     pub client: Pubkey,
-    pub address: String,
     pub expiration: u64,
     pub options: String,
     pub data: String
@@ -138,7 +137,6 @@ pub struct Subscription {
 
 #[derive(AnchorSerialize, AnchorDeserialize)]
 pub struct SubscriptionInput {
-    pub address: String,
     pub duration: u64,
     pub options: String
 }
