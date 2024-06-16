@@ -2,7 +2,7 @@
 seeds = false
 skip-lint = false
 [programs.localnet]
-oracle_smart_contract = "5hNwnrnKRrKmy8bHyGAZy9psMZPJSPsaq4eriGSpN7N5"
+oracle_smart_contract = "DNg1Qxv3r1CyN7NMmxh67kMjc7q6Bv5VHtoXhKnCL8bY"
 
 [registry]
 url = "https://api.apr.dev"

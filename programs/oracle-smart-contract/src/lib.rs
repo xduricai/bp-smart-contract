@@ -8,7 +8,7 @@ use crate::context::*;
 use crate::state::*;
 
 //anchor keys list
-declare_id!("5hNwnrnKRrKmy8bHyGAZy9psMZPJSPsaq4eriGSpN7N5");
+declare_id!("DNg1Qxv3r1CyN7NMmxh67kMjc7q6Bv5VHtoXhKnCL8bY");
 
 //TODO uncomment before compile
 #[program]
