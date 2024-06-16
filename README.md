@@ -27,10 +27,7 @@ anchor build
 anchor deploy
 ```
 
-- save the Program ID from your terminal as it will be needed later, alternatively it can also be retrieved with the following command 
-```bash
-solana address -k target/deploy/oracle_smart_contract-keypair.json
-```
+- save the Program ID from your terminal as it will be needed later, alternatively it can also be retrieved with the following command `solana address -k target/deploy/oracle_smart_contract-keypair.json` 
 - set the oracle_smart_contract field inside of `./bp-smart-contract/Anchor.toml` to the current Program ID
 - set the input of declare_id! inside of `./bp-smart-contract/programs/oracle-smart-contract/lib.rs` to the current Program ID  
 
