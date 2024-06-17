@@ -1,6 +1,6 @@
 # Oracle Smart Contract  
 
-Solana smart contract built using the [Anchor](https://www.anchor-lang.com/) framework. Serves as a proof of concept for [Internet of Value and DeFi in Solana](https://github.com/xduricai/bp-text). The smart contract oversees the data collection process. It determines which of the active oracles will be the leader of the current cycle based on a proof of stake mechanism. The contract also maintains the accounts for all users as well as active oracle nodes. Oracle accounts contain their stake and credentials while the user accounts are used to save subscription data.
+Solana smart contract built using the [Anchor](https://www.anchor-lang.com/) framework. Serves as a proof of concept for [Internet of Value and DeFi in Solana](https://github.com/xduricai/bp-main). The smart contract oversees the data collection process. It determines which of the active oracles will be the leader of the current cycle based on a proof of stake mechanism. The contract also maintains the accounts for all users as well as active oracle nodes. Oracle accounts contain their stake and credentials while the user accounts are used to save subscription data.
 
 ## Prerequisites  
 
